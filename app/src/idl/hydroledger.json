@@ -1,0 +1,201 @@
+{
+ "address": "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS",
+ "metadata": {
+  "name": "hydroledger",
+  "version": "0.1.0",
+  "spec": "0.1.0"
+ },
+ "instructions": [
+  {
+   "name": "register_plant",
+   "discriminator": [
+    149,
+    99,
+    223,
+    0,
+    224,
+    122,
+    214,
+    243
+   ],
+   "accounts": [
+    {
+     "name": "authority",
+     "writable": true,
+     "signer": true
+    },
+    {
+     "name": "plant",
+     "writable": true
+    },
+    {
+     "name": "system_program"
+    }
+   ],
+   "args": [
+    {
+     "name": "name",
+     "type": "string"
+    },
+    {
+     "name": "capacity_kw",
+     "type": "u32"
+    },
+    {
+     "name": "price_per_credit",
+     "type": "u64"
+    },
+    {
+     "name": "meter",
+     "type": "pubkey"
+    },
+    {
+     "name": "cooperative",
+     "type": "pubkey"
+    }
+   ]
+  },
+  {
+   "name": "submit_reading",
+   "discriminator": [
+    195,
+    186,
+    45,
+    0,
+    106,
+    119,
+    103,
+    166
+   ],
+   "accounts": [
+    {
+     "name": "meter",
+     "signer": true
+    },
+    {
+     "name": "plant",
+     "writable": true
+    }
+   ],
+   "args": [
+    {
+     "name": "wh",
+     "type": "u64"
+    }
+   ]
+  },
+  {
+   "name": "buy_credits",
+   "discriminator": [
+    14,
+    173,
+    58,
+    38,
+    248,
+    235,
+    115,
+    102
+   ],
+   "accounts": [
+    {
+     "name": "buyer",
+     "signer": true
+    },
+    {
+     "name": "plant",
+     "writable": true
+    },
+    {
+     "name": "buyer_token",
+     "writable": true
+    },
+    {
+     "name": "coop_token",
+     "writable": true
+    },
+    {
+     "name": "fee_token",
+     "writable": true
+    },
+    {
+     "name": "token_program"
+    }
+   ],
+   "args": [
+    {
+     "name": "amount",
+     "type": "u64"
+    }
+   ]
+  }
+ ],
+ "accounts": [
+  {
+   "name": "Plant",
+   "discriminator": [
+    221,
+    207,
+    23,
+    150,
+    148,
+    54,
+    227,
+    103
+   ]
+  }
+ ],
+ "types": [
+  {
+   "name": "Plant",
+   "type": {
+    "kind": "struct",
+    "fields": [
+     {
+      "name": "authority",
+      "type": "pubkey"
+     },
+     {
+      "name": "meter",
+      "type": "pubkey"
+     },
+     {
+      "name": "cooperative",
+      "type": "pubkey"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "capacity_kw",
+      "type": "u32"
+     },
+     {
+      "name": "price_per_credit",
+      "type": "u64"
+     },
+     {
+      "name": "total_wh",
+      "type": "u64"
+     },
+     {
+      "name": "minted_credits",
+      "type": "u64"
+     },
+     {
+      "name": "sold_credits",
+      "type": "u64"
+     },
+     {
+      "name": "last_ts",
+      "type": "i64"
+     },
+     {
+      "name": "bump",
+      "type": "u8"
+     }
+    ]
+   }
+  }
+ ]
+}

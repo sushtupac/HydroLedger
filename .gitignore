@@ -4,3 +4,7 @@ target
 .next
 test-ledger
 .env*
+
+scripts/.device-key.json
+app/public/deployment.json
+app/next-env.d.ts

@@ -1,34 +1,33 @@
-// Simulates an ESP32 + RS485 meter. Run after `anchor build && anchor deploy`.
-// Usage: ANCHOR_PROVIDER_URL=http://127.0.0.1:8899 ANCHOR_WALLET=~/.config/solana/id.json yarn simulate
-import * as anchor from "@coral-xyz/anchor";
-import idl from "../target/idl/hydroledger.json";
+// Simulated hardware meter: signs telemetry with its device key and POSTs it to the bridge.
+// Usage: npm run simulate   (Next.js app must be running on http://localhost:3000)
+import { Keypair } from "@solana/web3.js";
+import nacl from "tweetnacl";
+import fs from "fs";
+import path from "path";
 
-const NAME = "Ghandruk-45kW";
-const CAPACITY_KW = 45;
-const INTERVAL_S = 10;
+const BRIDGE = process.env.BRIDGE_URL || "http://localhost:3000/api/telemetry";
+const INTERVAL_S = 10, HEAD_M = 60, EFFICIENCY = 0.75;
 
 (async () => {
-  const provider = anchor.AnchorProvider.env();
-  anchor.setProvider(provider);
-  const program = new anchor.Program(idl as anchor.Idl, provider);
-  const me = provider.wallet.publicKey; // demo: authority, meter and cooperative are the same key
-  const [plant] = anchor.web3.PublicKey.findProgramAddressSync(
-    [Buffer.from("plant"), me.toBuffer(), Buffer.from(NAME)], program.programId);
-
-  if (!(await provider.connection.getAccountInfo(plant))) {
-    await program.methods
-      .registerPlant(NAME, CAPACITY_KW, new anchor.BN(10_000_000), me, me)
-      .accounts({ plant, authority: me }).rpc();
-    const backfill = Math.round(CAPACITY_KW * 1000 * 24 * 0.8); // 80% of 24h at capacity
-    await program.methods.submitReading(new anchor.BN(backfill)).accounts({ plant, meter: me }).rpc();
-    console.log("Registered plant and backfilled", backfill / 1000, "kWh");
-  }
+  const dep = JSON.parse(fs.readFileSync(path.join(__dirname, "../app/public/deployment.json"), "utf8"));
+  const device = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(fs.readFileSync(path.join(__dirname, ".device-key.json"), "utf8"))));
+  let nonce = Date.now();
 
   for (;;) {
-    await new Promise((r) => setTimeout(r, INTERVAL_S * 1000));
-    const wh = Math.round((CAPACITY_KW * 1000 * INTERVAL_S / 3600) * (0.7 + 0.3 * Math.random()));
-    await program.methods.submitReading(new anchor.BN(wh)).accounts({ plant, meter: me }).rpc();
-    const p: any = await (program.account as any).plant.fetch(plant);
-    console.log(`+${wh} Wh | total ${(p.totalWh.toNumber() / 1000).toFixed(1)} kWh | credits ${p.mintedCredits.toNumber()}`);
+    const kw = Math.round(dep.capacityKw * (0.7 + 0.25 * Math.random()) * 10) / 10;
+    const flowLps = Math.round((kw * 1000) / (9.81 * HEAD_M * EFFICIENCY) * 10) / 10; // P = rho*g*Q*H*eta
+    const pressureBar = Math.round((HEAD_M * 9.81 / 100) * (0.97 + 0.06 * Math.random()) * 10) / 10;
+    const wh = Math.round((kw * 1000 * INTERVAL_S) / 3600);
+    const ts = Math.floor(Date.now() / 1000);
+    nonce += 1;
+    const msg = `${dep.plant}|${kw}|${flowLps}|${pressureBar}|${wh}|${nonce}|${ts}`;
+    const signature = Buffer.from(nacl.sign.detached(new TextEncoder().encode(msg), device.secretKey)).toString("base64");
+    try {
+      const r = await fetch(BRIDGE, { method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ plant: dep.plant, kw, flowLps, pressureBar, wh, nonce, ts, signature }) });
+      const j: any = await r.json();
+      console.log(r.ok ? `+${wh} Wh @ ${kw} kW  tx ${j.sig.slice(0, 12)}...` : `rejected: ${j.error}`);
+    } catch (e: any) { console.log("bridge unreachable:", e.message); }
+    await new Promise((res) => setTimeout(res, INTERVAL_S * 1000));
   }
 })();

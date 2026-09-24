@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("3pZxbQYzUfPAeZ6ruv7p78B4ZW1d7SZy1Nc7GBfHnSzH");
 
 /// 1 credit = 1,000 kWh = 1,000,000 Wh of verified generation.
 pub const WH_PER_CREDIT: u64 = 1_000_000;

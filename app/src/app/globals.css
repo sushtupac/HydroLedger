@@ -18,3 +18,21 @@ button { margin-top:40px; background:var(--lamp); color:var(--deep); border:0; b
 button:focus-visible { outline:3px solid var(--melt); outline-offset:3px; }
 button:disabled { opacity:.5; cursor:not-allowed; }
 .note { color:#8fb0b0; font-size:.85rem; margin-top:16px; max-width:70ch; }
+.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin:24px 0; }
+.card { background:var(--stone); border-radius:16px; padding:18px 20px; }
+.card svg { color:var(--lamp); }
+.card b { display:block; font:700 1.9rem "Bricolage Grotesque",sans-serif; }
+.card span { color:var(--melt); font-size:.9rem; }
+.chart { background:var(--stone); border-radius:16px; padding:16px 8px 8px; height:260px; }
+.chart h3 { margin:0 0 8px 12px; font-size:1rem; font-weight:500; color:var(--melt); }
+.actions { display:flex; gap:12px; flex-wrap:wrap; }
+button.ghost { background:transparent; color:var(--snow); border:1px solid var(--melt); }
+.err { color:#ffb4a8; margin-top:12px; font-size:.9rem; word-break:break-word; }
+.overlay { position:fixed; inset:0; background:rgba(4,14,18,.8); display:grid; place-items:center; padding:16px; z-index:50; }
+.modal { background:var(--snow); color:var(--deep); border-radius:20px; max-width:520px; width:100%; padding:28px; position:relative; }
+.modal h2 { font-family:"Bricolage Grotesque",sans-serif; margin:0 0 4px; }
+.modal dl { display:grid; grid-template-columns:120px 1fr; gap:8px 12px; margin:20px 0 0; font-size:.92rem; }
+.modal dt { color:#4a6a70; } .modal dd { margin:0; word-break:break-all; }
+.modal button.x { position:absolute; top:12px; right:12px; margin:0; padding:6px; background:transparent; color:var(--deep); }
+.modal a { color:#0b6b62; }

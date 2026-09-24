@@ -1,13 +1,22 @@
 [toolchain]
+solana_version = "4.2.2"
+
 [features]
-seeds = false
+resolution = true
 skip-lint = false
+
+[programs.devnet]
+hydroledger = "3pZxbQYzUfPAeZ6ruv7p78B4ZW1d7SZy1Nc7GBfHnSzH"
+
 [programs.localnet]
 hydroledger = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
-[programs.devnet]
-hydroledger = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+
+[registry]
+url = "https://api.apr.dev"
+
 [provider]
-cluster = "localnet"
+cluster = "Localnet"
 wallet = "~/.config/solana/id.json"
+
 [scripts]
 test = "npx ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
