@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500&display=swap");
+:root { --deep:#0e2a33; --stone:#173a46; --melt:#7fd1c7; --snow:#f3f7f6; --lamp:#f2b04a; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--deep); color:var(--snow); font:400 16px/1.55 "IBM Plex Sans",system-ui,sans-serif; }
+main { max-width: 960px; margin: 0 auto; padding: 48px 20px 80px; }
+h1,.big { font-family:"Bricolage Grotesque",sans-serif; }
+h1 { font-size: clamp(2rem,5vw,3.2rem); margin:0 0 4px; font-weight:700; letter-spacing:-.02em; }
+.sub { color:var(--melt); margin:0 0 40px; max-width:60ch; }
+.hero { display:flex; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:8px; }
+.big { font-size: clamp(4rem,14vw,8rem); line-height:.9; font-weight:700; color:var(--lamp); }
+.unit { font-size:1.4rem; color:var(--melt); padding-bottom:10px; }
+.bars { display:flex; align-items:flex-end; gap:3px; height:64px; margin:20px 0 40px; }
+.bars i { flex:1; background:var(--melt); opacity:.8; border-radius:2px 2px 0 0; min-width:2px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:32px; border-top:1px solid var(--stone); padding-top:28px; }
+.stats b { display:block; font:700 2rem "Bricolage Grotesque",sans-serif; }
+.stats span { color:var(--melt); font-size:.9rem; }
+button { margin-top:40px; background:var(--lamp); color:var(--deep); border:0; border-radius:999px; padding:14px 28px; font:500 1rem inherit; cursor:pointer; }
+button:focus-visible { outline:3px solid var(--melt); outline-offset:3px; }
+button:disabled { opacity:.5; cursor:not-allowed; }
+.note { color:#8fb0b0; font-size:.85rem; margin-top:16px; max-width:70ch; }
