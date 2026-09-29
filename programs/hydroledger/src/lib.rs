@@ -65,21 +65,28 @@ pub mod hydroledger {
         let fee = total * FEE_BPS / 10_000;
         let net = total - fee;
 
-        let xfer = |from: &Account<'_, TokenAccount>, to: &Account<'_, TokenAccount>, amt: u64| {
-            token::transfer(
-                CpiContext::new(
-                    ctx.accounts.token_program.to_account_info(),
-                    Transfer {
-                        from: from.to_account_info(),
-                        to: to.to_account_info(),
-                        authority: ctx.accounts.buyer.to_account_info(),
-                    },
-                ),
-                amt,
-            )
-        };
-        xfer(&ctx.accounts.buyer_token, &ctx.accounts.coop_token, net)?;
-        xfer(&ctx.accounts.buyer_token, &ctx.accounts.fee_token, fee)?;
+        token::transfer(
+            CpiContext::new(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from: ctx.accounts.buyer_token.to_account_info(),
+                    to: ctx.accounts.coop_token.to_account_info(),
+                    authority: ctx.accounts.buyer.to_account_info(),
+                },
+            ),
+            net,
+        )?;
+        token::transfer(
+            CpiContext::new(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from: ctx.accounts.buyer_token.to_account_info(),
+                    to: ctx.accounts.fee_token.to_account_info(),
+                    authority: ctx.accounts.buyer.to_account_info(),
+                },
+            ),
+            fee,
+        )?;
 
         p.sold_credits += amount;
         emit!(CreditsPurchased { plant: p.key(), buyer: ctx.accounts.buyer.key(), amount, paid: total });
