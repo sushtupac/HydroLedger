@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-hydroledger = "3pZxbQYzUfPAeZ6ruv7p78B4ZW1d7SZy1Nc7GBfHnSzH"
+hydroledger = "13iX9AVLTh68Vxc1bjYKynKsHUxe73sF7AMtaMfLAnZG"
 
 [programs.localnet]
 hydroledger = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
@@ -15,7 +15,7 @@ hydroledger = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
